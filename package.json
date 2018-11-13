@@ -12,8 +12,13 @@
   "devDependencies": {
     "bootstrap-sass": "^3.3.7",
     "cross-env": "^3.2.3",
+    "jest": "^23.6.0",
     "jquery": "^3.1.1",
     "laravel-mix": "0.*",
     "lodash": "^4.17.11"
+  },
+  "jest": {
+    "moduleNameMapper":{"@/(.*)$":"<rootDir>/resources/assets/js/components/$1"},
+    "testMatch":["<rootDir>/tests/Jest/*.js"]
   }
 }

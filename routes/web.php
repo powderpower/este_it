@@ -1,2 +1,2 @@
 <?php
-Route::get('/', 'PagesController@index');
+Route::get('/', 'RouteController@index');

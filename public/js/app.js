@@ -71,10 +71,20 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 window.a = window.jQuery = __webpack_require__(2);
-window.token = document.head.querySelector('meta[name="csrf-token"]').content;
+var token = document.head.querySelector('meta[name="csrf-token"]').content;
 
 (function () {
-    console.log(a('body').length, 'ok');
+    /*
+    a.post('/', {'_token':token, tags:[1,4], exclude:[6]}, 'json')
+    .done( b =>
+    {
+        console.log(b);
+    })
+    .fail( b =>
+    {
+        console.log(b);
+    });
+    */
 })();
 
 /***/ }),

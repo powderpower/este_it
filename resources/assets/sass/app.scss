@@ -7,3 +7,26 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.mt-1
+{
+    margin-top: ($spacer * 1.25);
+}
+
+.mt-2
+{
+    margin-top: ($spacer * 2);
+}
+
+.mr-1
+{
+    margin-right: ($spacer * 1.25);
+}
+
+.tag-pool
+{
+    width: 100%;
+    min-height: 80px;
+    border: 1px solid gray;
+    border-radius:3px;
+}

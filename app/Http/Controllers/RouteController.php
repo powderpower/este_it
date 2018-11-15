@@ -82,7 +82,6 @@ class RouteController extends Controller
                 $this->manage_db($item);
             endif;
         endforeach;
-        dd(is_writable(public_path()));
         return view('main')->with('tags', Tag::all());
     }
     
@@ -107,7 +106,7 @@ class RouteController extends Controller
         foreach($content as $key=>$val):
             $text .= $key.'; "'.$val.'"; ';
         endforeach;
-        Storage::disk('my_upload')->put('hhh.txt', 'ff');
-        return [storage_path('app'), public_path('my_upload')];
+        Storage::disk('public')->put('output_'.rand(1000, 9999).'.csv', $text);
+        return 'ok';
     }
 }

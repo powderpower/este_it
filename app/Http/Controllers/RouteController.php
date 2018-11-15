@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use App\DynamicModel;
@@ -41,7 +40,6 @@ class RouteController extends Controller
                     "3" => [1,4,6],
                     "4" => [1,6]
                 ];
-                Log::info(var_dump($inner));
                 foreach($inner as $key => $val):
                     foreach($val as $id):
                         $content[] = ["item_id" => $key, "tag_id" => $id];
@@ -84,12 +82,32 @@ class RouteController extends Controller
                 $this->manage_db($item);
             endif;
         endforeach;
-        $content = [];
-        $item = Item::find(3);
-        foreach($item->tags as $tag):
-            $content[] = $tag->name;
+        dd(is_writable(public_path()));
+        return view('main')->with('tags', Tag::all());
+    }
+    
+    public function manageTags(Request $request)
+    {
+        $items = Tag::with('items')->whereIn('id', $request->tags)->get();
+        $text ="";
+        foreach($items as $item):
+            foreach($item['items'] as $val):
+                $collection[$val['id']] = $val['name'];
+            endforeach;
         endforeach;
-        return var_dump($content);
-        //return view('main');
+        foreach($collection as $key=>$val):
+            $excludes = !empty($request->exclude) ? $request->exclude : [0];
+            $col = Item::find($key);
+            $tagsId =[];
+            foreach($col->tags as $ctags):
+                $tagsId[] = $ctags['id'];
+            endforeach;
+            (empty(array_intersect($excludes, $tagsId)))&&($content[$key] = $val);
+        endforeach;
+        foreach($content as $key=>$val):
+            $text .= $key.'; "'.$val.'"; ';
+        endforeach;
+        Storage::disk('my_upload')->put('hhh.txt', 'ff');
+        return [storage_path('app'), public_path('my_upload')];
     }
 }

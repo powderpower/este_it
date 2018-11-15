@@ -71,7 +71,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 window.a = window.jQuery = __webpack_require__(2);
-var token = document.head.querySelector('meta[name="csrf-token"]');
+window.token = document.head.querySelector('meta[name="csrf-token"]').content;
 
 (function () {
     console.log(a('body').length, 'ok');

@@ -66,7 +66,8 @@ class RouteController extends Controller
                     case 'item_tag_link':
                         $table->integer('item_id')->nullable()->unsigned();
                         $table->integer('tag_id')->nullable()->unsigned();
-                        $table->foreign('item_id')->references('id')->on('tag');
+                        $table->foreign('item_id')->references('id')->on('item');
+                        $table->foreign('tag_id')->references('id')->on('tag');
                         break;
                     break;
                 endswitch;

@@ -13,24 +13,21 @@
             <div class='row'>
                 <div class='col-md-12'>
                     <h1 class="display-4">Выберите тэги</h1>
-                    <div class='tag-pad'>
+                    <div class='tag-pad p-tag'>
                         @foreach($tags as $tag)
-                            <div id='{{$tag->id}}' opt='inc' class="btn btn-primary mr-1 mt-1">
+                            <div id='{{$tag->id}}' c-act='push-tag' opt='tags' pos='pad' class='btn btn-primary mr-1 mt-1 clickable'>
                                 {{$tag->name}}
                             </div>
                         @endforeach
                     </div>
                     <h1 class="display-4">Выберите исключающие тэги</h1>
-                    <div class='tag-pad'>
+                    <div class='tag-pad p-exc'>
                         @foreach($tags as $tag)
-                            <div id='{{$tag->id}}' opt='exc' class="btn btn-danger mr-1 mt-1">
-                                {{$tag->name}}
-                            </div>
+                            <div id='{{$tag->id}}' c-act='push-tag' opt='exclude' pos='pad' class='btn btn-danger mr-1 mt-1 clickable'>{{$tag->name}}</div>
                         @endforeach                    
                     </div>
-                    <div class='tag-pool mt-2'>
-
-                    </div>
+                    <div class='tag-pool mt-2'></div>
+                    <div c-act='send-tags' class='btn btn-success mt-1 clickable'>Отправить</div>
                 </div>
             </div>
         </div>

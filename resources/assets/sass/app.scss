@@ -26,7 +26,8 @@
 .tag-pool
 {
     width: 100%;
-    min-height: 80px;
+    min-height: 61px;
     border: 1px solid gray;
     border-radius:3px;
+    padding: 0 ($spacer * 1.25) ($spacer * 1.25) ($spacer * 1.25);
 }

@@ -87,26 +87,38 @@ class RouteController extends Controller
     
     public function manageTags(Request $request)
     {
-        $items = Tag::with('items')->whereIn('id', $request->tags)->get();
-        $text ="";
+        $errorInfo = ['stat' => 'err', 'message' => 'no_data'];
+        if(empty($request->tags)&&empty($request->exclude)) return response()->json($errorInfo);
+        if(!empty($request->tags)):
+            $items = Tag::with('items')->whereIn('id', $request->tags)->get();
+        else:
+            $items = Tag::with('items')->get();
+        endif;
+        $text = "";
+        $message = [];
         foreach($items as $item):
             foreach($item['items'] as $val):
                 $collection[$val['id']] = $val['name'];
             endforeach;
         endforeach;
         foreach($collection as $key=>$val):
-            $excludes = !empty($request->exclude) ? $request->exclude : [0];
             $col = Item::find($key);
             $tagsId =[];
             foreach($col->tags as $ctags):
                 $tagsId[] = $ctags['id'];
             endforeach;
-            (empty(array_intersect($excludes, $tagsId)))&&($content[$key] = $val);
+            if(empty($request->exclude)):
+                $content[$key] = $val;
+            else:
+                (empty(array_intersect($request->exclude, $tagsId)))&&($content[$key] = $val);
+            endif;
         endforeach;
+        if(empty($content)) return response()->json($errorInfo);
         foreach($content as $key=>$val):
             $text .= $key.'; "'.$val.'"; ';
+            $message[] = $val;
         endforeach;
         Storage::disk('public')->put('output_'.rand(1000, 9999).'.csv', $text);
-        return 'ok';
+        return response()->json(['stat' => 'ok', 'message' => $message]);
     }
 }

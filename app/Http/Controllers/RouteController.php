@@ -5,6 +5,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\File;
 use App\DynamicModel;
 use App\Intermediary;
 use App\Item;
@@ -88,7 +91,6 @@ class RouteController extends Controller
     public function manageTags(Request $request)
     {
         $errorInfo = ['stat' => 'err', 'message' => 'no_data'];
-        if(empty($request->tags)&&empty($request->exclude)) return response()->json($errorInfo);
         if(!empty($request->tags)):
             $items = Tag::with('items')->whereIn('id', $request->tags)->get();
         else:
@@ -118,7 +120,24 @@ class RouteController extends Controller
             $text .= $key.'; "'.$val.'"; ';
             $message[] = $val;
         endforeach;
-        Storage::disk('public')->put('output_'.rand(1000, 9999).'.csv', $text);
-        return response()->json(['stat' => 'ok', 'message' => $message]);
+        $path = 'output_'.rand(1000, 9999).'.csv';
+        Storage::disk('public')->put($path, $text);
+        return response()->json(['stat' => 'ok', 'message' => $message, 'link' => $path]);
+    }
+
+    public function download($name)
+    {
+        $filePath = storage_path('app/public/'.$name);
+        $headers = [
+            'Content-Length: '. filesize($filePath),
+            "Content-type: text/csv; charset=utf-8"
+        ];
+        if (file_exists($filePath)):
+            $response = Response::make(file_get_contents($filePath), 200, $headers);
+            File::delete($filePath);
+            return $response;
+        else:
+            return response()->json(['stat' => 'err', 'message' => 'not_exist']);
+        endif;
     }
 }

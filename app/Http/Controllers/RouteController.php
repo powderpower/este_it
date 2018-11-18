@@ -118,7 +118,12 @@ class RouteController extends Controller
         if(empty($content)) return response()->json($errorInfo);
         foreach($content as $key=>$val):
             $text .= $key.'; "'.$val.'"; ';
+            $update[] = $key;
             $message[] = $val;
+        endforeach;
+        foreach($update as $id):
+            $item = Item::find($id);
+            $item->update(['show_count'=>$item->show_count + 1]);
         endforeach;
         $path = 'output_'.rand(1000, 9999).'.csv';
         Storage::disk('public')->put($path, $text);

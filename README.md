@@ -5,7 +5,7 @@
 
 **item** - товары
 
-| id | name | show |
+| id | name | show_count |
 |--|--|--|
 | 1 | Кроссовки Nike | 5 |
 | 2 | Джинсы Levi's | 10 |
